@@ -8,9 +8,16 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // 1. Middlewares (Configuración Global)
-app.use(helmet()); // Añade cabeceras de seguridad HTTP
-app.use(cors()); // Permite peticiones desde otros dominios (como React/Laravel)
-app.use(express.json()); // Permite recibir datos JSON en el cuerpo de las peticiones
+app.use(helmet());
+
+// Configuración estricta de CORS
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'https://proyectosakaridentalconnect-production.up.railway.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
+app.use(express.json());
 
 // 2. Rutas
 const authRoutes = require('./src/routes/auth.routes');
