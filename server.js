@@ -7,15 +7,18 @@ const { sequelize, testConnection } = require('./src/config/database');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// 1. Middlewares (Configuración Global)
-app.use(helmet());
-
 // Configuración estricta de CORS
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'https://proyectosakaridentalconnect-production.up.railway.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+
+// 1. Middlewares (Configuración Global)
+app.use(helmet());
+
+
+
 
 app.use(express.json());
 
