@@ -13,7 +13,8 @@ const enviarCorreoRecuperacion = async (email, resetUrl) => {
         },
         tls: {
             rejectUnauthorized: false
-        }
+        },
+        family: 4,
     });
 
     // 2. Definir el contenido del correo html/text
