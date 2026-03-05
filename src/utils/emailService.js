@@ -1,14 +1,23 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
-// Inicializamos Resend con la llave que pusiste en Railway
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Configuramos el "transporter" de Nodemailer usando variables de entorno
+// Esto es ideal para configurarlo directamente en tu panel de Railway
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST, 
+    port: process.env.SMTP_PORT || 587,
+    secure: process.env.SMTP_SECURE === 'true', // true para el puerto 465, false para otros (como 587)
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
 
 const enviarCorreoRecuperacion = async (email, resetUrl) => {
     try {
-        const { data, error } = await resend.emails.send({
-            // IMPORTANTE: En el plan gratis, el remitente siempre debe ser este:
-            from: 'DentalConnect <onboarding@resend.dev>',
-            to: email, // Recuerda: para pruebas, usa el mismo correo con el que creaste tu cuenta de Resend
+        const mailOptions = {
+            // El remitente ahora será el correo que configures en tu SMTP
+            from: `"DentalConnect" <${process.env.SMTP_USER}>`,
+            to: email, // Ahora sí, a cualquier correo de la base de datos
             subject: 'Recuperación de Contraseña - DentalConnect',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -24,19 +33,17 @@ const enviarCorreoRecuperacion = async (email, resetUrl) => {
                     <p>Saludos,<br>El equipo de DentalConnect</p>
                 </div>
             `
-        });
+        };
 
-        if (error) {
-            console.error("Error al enviar con Resend:", error);
-            throw new Error('Fallo al enviar correo con Resend');
-        }
-
-        console.log("Correo enviado exitosamente:", data);
-        return data;
+        // Enviamos el correo
+        const info = await transporter.sendMail(mailOptions);
+        
+        console.log("Correo enviado exitosamente con Nodemailer. ID:", info.messageId);
+        return info;
 
     } catch (error) {
-        console.error("Error en emailService:", error);
-        throw error;
+        console.error("Error al enviar con Nodemailer:", error);
+        throw new Error('Fallo al enviar correo de recuperación');
     }
 };
 
