@@ -1,23 +1,22 @@
 const nodemailer = require('nodemailer');
 
-// Configuramos el "transporter" de Nodemailer usando variables de entorno
-// Esto es ideal para configurarlo directamente en tu panel de Railway
+
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST, 
-    port: process.env.SMTP_PORT || 587,
-    secure: process.env.SMTP_SECURE === 'true', // true para el puerto 465, false para otros (como 587)
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
 const enviarCorreoRecuperacion = async (email, resetUrl) => {
     try {
         const mailOptions = {
-            // El remitente ahora será el correo que configures en tu SMTP
-            from: `"DentalConnect" <${process.env.SMTP_USER}>`,
-            to: email, // Ahora sí, a cualquier correo de la base de datos
+        
+            from: `"DentalConnect" <${process.env.EMAIL_USER}>`,
+            to: email, 
             subject: 'Recuperación de Contraseña - DentalConnect',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
