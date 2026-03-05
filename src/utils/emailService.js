@@ -1,26 +1,13 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    },
-    family: 4
-});
+// Inicializamos Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const enviarCorreoRecuperacion = async (email, resetUrl) => {
     try {
-        const mailOptions = {
-        
-            from: `"DentalConnect" <${process.env.EMAIL_USER}>`,
-            to: email, 
+        const { data, error } = await resend.emails.send({
+            from: 'DentalConnect <soporte@dentalconnect.cloud>',
+            to: email,
             subject: 'Recuperación de Contraseña - DentalConnect',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -36,17 +23,19 @@ const enviarCorreoRecuperacion = async (email, resetUrl) => {
                     <p>Saludos,<br>El equipo de DentalConnect</p>
                 </div>
             `
-        };
+        });
 
-        // Enviamos el correo
-        const info = await transporter.sendMail(mailOptions);
-        
-        console.log("Correo enviado exitosamente con Nodemailer. ID:", info.messageId);
-        return info;
+        if (error) {
+            console.error("Error al enviar con Resend:", error);
+            throw new Error('Fallo al enviar correo con Resend');
+        }
+
+        console.log("Correo enviado exitosamente con Resend. ID:", data.id);
+        return data;
 
     } catch (error) {
-        console.error("Error al enviar con Nodemailer:", error);
-        throw new Error('Fallo al enviar correo de recuperación');
+        console.error("Error en emailService:", error);
+        throw error;
     }
 };
 
