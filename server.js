@@ -28,6 +28,9 @@ app.use(express.json());
 const authRoutes = require('./src/routes/auth.routes');
 app.use('/api/auth', authRoutes);
 
+const citasRoutes = require('./src/routes/citas.routes');
+app.use('/api/citas', citasRoutes);
+
 app.get('/api/status', (req, res) => {
     res.json({ status: "API Online", version: "1.0.0" });
 });
