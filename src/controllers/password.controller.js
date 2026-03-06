@@ -47,10 +47,11 @@ exports.forgotPassword = async (req, res) => {
 // 2. APLICAR RESTABLECIMIENTO (Validar Token y Actualizar Password)
 exports.resetPassword = async (req, res) => {
     try {
-        const { token, email, newPassword } = req.body;
+        const { token, email, newPassword, password } = req.body;
+        const pass = newPassword || password;
 
-        if (!token || !email || !newPassword) {
-            return res.status(400).json({ error: 'Faltan datos requeridos (token, email, newPassword)' });
+        if (!token || !email || !pass) {
+            return res.status(400).json({ error: 'Faltan datos requeridos (token, email, password)' });
         }
 
         // Hashear el token recibido para cruzarlo con el de la Base de Datos
@@ -76,7 +77,7 @@ exports.resetPassword = async (req, res) => {
 
         // Aqui encriptamos la NUEVA contraseña (bcrypt)
         const salt = await bcrypt.genSalt(10);
-        let hashedPassword = await bcrypt.hash(newPassword, salt);
+        let hashedPassword = await bcrypt.hash(pass, salt);
 
         //aqui le decimos a la base de datos que la ecriptacion de la contraseña que fue cambiada
         //sea compatible con la ecriptacion de la contraseña que fue cambiada en laravel
