@@ -54,6 +54,20 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({ error: 'Faltan datos requeridos (token, email, password)' });
         }
 
+        // Validaciones de seguridad de contraseña (mismas reglas que el registro)
+        if (pass.length < 8) {
+            return res.status(400).json({ error: 'La contraseña debe tener mínimo 8 caracteres.' });
+        }
+        if (!/[A-Z]/.test(pass)) {
+            return res.status(400).json({ error: 'La contraseña debe contener al menos una letra mayúscula.' });
+        }
+        if (!/[\W_]/.test(pass)) {
+            return res.status(400).json({ error: 'La contraseña debe contener al menos un carácter especial (ej. @, #, $, !).' });
+        }
+        if (/123/.test(pass)) {
+            return res.status(400).json({ error: 'La contraseña no puede contener secuencias numéricas como 123.' });
+        }
+
         // Hashear el token recibido para cruzarlo con el de la Base de Datos
         const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
