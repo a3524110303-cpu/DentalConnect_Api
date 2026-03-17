@@ -4,7 +4,7 @@ const { sequelize } = require('../config/database');
 // Mapeamos el modelo a la tabla "usuarios_sistema" de Laravel
 const User = sequelize.define('User', {
     id_usuario: {
-        type: DataTypes.INTEGER,
+       type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true
     },
