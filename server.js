@@ -10,10 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Configuración estricta de CORS
+// Configuración dinámica y a prueba de fallos de CORS
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'https://dentalconnect.cloud',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'], // Cabeceras permitidas
+    // Al poner 'true', Express refleja automáticamente el dominio que hace la petición
+    // Esto evita cualquier problema de espacios en blanco o URLs mal escritas
+    origin: true,
+    // Es vital agregar 'OPTIONS' para que el preflight request pase
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    // Declarar explícitamente las cabeceras permitidas
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
     credentials: true
 }));
 
