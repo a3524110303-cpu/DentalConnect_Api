@@ -42,10 +42,10 @@ const startServer = async () => {
         await testConnection();
 
         // B) Sincronización de Modelos
-        // Usamos alter: true para que agrgeue las columnas nuevas (tokens de password)
-        // a la tabla que ya existe de Laravel sin borrar sus datos.
-        await sequelize.sync({ alter: true });
-        console.log('Tablas sincronizadas correctamente. Columnas nuevas añadidas si faltaban.');
+        // En un entorno compartido con Laravel, evitamos que Sequelize altere las tablas.
+        // Solo autenticamos la conexión.
+        await sequelize.authenticate();
+        console.log('Conexión a la base de datos establecida correctamente.');
 
         // C) Levantar el servidor Express
         app.listen(PORT, () => {

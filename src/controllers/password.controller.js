@@ -94,7 +94,7 @@ exports.resetPassword = async (req, res) => {
         let hashedPassword = await bcrypt.hash(pass, salt);
 
         //aqui le decimos a la base de datos que la ecriptacion de la contraseña que fue cambiada
-        //sea compatible con la ecriptacion de la contraseña que fue cambiada en laravel
+        //sea compatible con la encriptacion de la contraseña que fue cambiada en laravel
         hashedPassword = hashedPassword.replace(/^\$2[ab]\$/, '$2y$');
 
         // Actualizar y Limpiar Tokens
