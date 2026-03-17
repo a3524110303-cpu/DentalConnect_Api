@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 4000;
 // Configuración estricta de CORS
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'https://dentalconnect.cloud',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'], // Cabeceras permitidas
     credentials: true
 }));
