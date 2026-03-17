@@ -34,18 +34,19 @@ app.get('/api/status', (req, res) => {
 
 // 3. Inicialización del Sistema
 const startServer = async () => {
+    // 1. Primero levantamos el servidor para que siempre pueda responder (y evitar errores de CORS)
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Servidor expuesto y corriendo en el puerto ${PORT}`);
+    });
+
+    // 2. Después intentamos conectar a la base de datos
     try {
         await testConnection();
         await sequelize.authenticate();
         console.log('Conexión a la base de datos establecida correctamente.');
-
-        // Escuchar en 0.0.0.0 para que Railway pueda conectarlo a internet
-        app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Servidor expuesto y corriendo en el puerto ${PORT}`);
-        });
-
     } catch (error) {
-        console.error('Error fatal al iniciar el servicio:', error);
+        console.error('Error fatal al conectar con la base de datos:', error);
+        // Aquí no detenemos la app, para que puedas ver el error real
     }
 };
 
