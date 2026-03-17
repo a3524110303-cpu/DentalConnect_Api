@@ -10,7 +10,7 @@ const User = sequelize.define('User', {
     },
     // Foreign key a clínicas (opcional aquí si no hacemos JOINs)
     id_clinica: {
-        type: DataTypes.INTEGER,
+type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true
     },
     nombre_completo: {
