@@ -54,10 +54,9 @@ const startServer = async () => {
         console.log('Conexión a la base de datos establecida correctamente.');
 
         // C) Levantar el servidor Express
-        app.listen(PORT, () => {
-            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Servidor expuesto y corriendo en el puerto ${PORT}`);
         });
-
     } catch (error) {
         console.error('Error fatal al iniciar el servicio:', error);
     }
