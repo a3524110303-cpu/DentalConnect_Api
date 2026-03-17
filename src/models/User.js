@@ -4,13 +4,13 @@ const { sequelize } = require('../config/database');
 // Mapeamos el modelo a la tabla "usuarios_sistema" de Laravel
 const User = sequelize.define('User', {
     id_usuario: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED,
         primaryKey: true,
         autoIncrement: true
     },
     // Foreign key a clínicas (opcional aquí si no hacemos JOINs)
     id_clinica: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT.UNSIGNED,
         allowNull: true
     },
     nombre_completo: {
