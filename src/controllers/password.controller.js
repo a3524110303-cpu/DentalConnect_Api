@@ -27,7 +27,7 @@ exports.forgotPassword = async (req, res) => {
 
         // Construir URL de reseteo para el Frontend (React o Laravel Blade)
         // Obtenemos FRONTEND_URL de las variables de entorno o usamos auth/restablecer-password por defecto
-        const frontendURL = process.env.FRONTEND_URL || 'http://localhost:8000';
+        const frontendURL = process.env.FRONTEND_URL || 'https://dentalconnect.cloud';
         const resetUrl = `${frontendURL}/recuperar-password?token=${resetToken}&email=${email}`;
 
         // Enviar Correo
